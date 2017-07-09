@@ -350,7 +350,7 @@ def PointerSeq2Seq(output_dim, output_length, batch_input_shape=None,
         encoder.add(LSTMCell(hidden_dim))
 
     if bidirectional:
-        encoder = Bidirectional(encoder, merge_mode='sum')
+        encoder = Bidirectional(encoder, merge_mode='concat')
         encoder.forward_layer.build(shape)
         encoder.backward_layer.build(shape)
         # patch
@@ -361,9 +361,9 @@ def PointerSeq2Seq(output_dim, output_length, batch_input_shape=None,
                                   unroll=unroll, stateful=stateful)
     decoder.add(Dropout(dropout, batch_input_shape=(shape[0], shape[1], hidden_dim)))
     if depth[1] == 1:
-        decoder.add(AttentionDecoderCell(output_dim=output_dim, hidden_dim=hidden_dim))
+        decoder.add(PointerDecoderCell(output_dim=output_dim, hidden_dim=hidden_dim))
     else:
-        decoder.add(AttentionDecoderCell(output_dim=output_dim, hidden_dim=hidden_dim))
+        decoder.add(PointerDecoderCell(output_dim=output_dim, hidden_dim=hidden_dim))
         for _ in range(depth[1] - 2):
             decoder.add(Dropout(dropout))
             decoder.add(LSTMDecoderCell(output_dim=hidden_dim, hidden_dim=hidden_dim))

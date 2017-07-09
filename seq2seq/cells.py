@@ -115,7 +115,7 @@ class PointerDecoderCell(ExtendedRNNCell):
         else:
             self.hidden_dim = self.output_dim
         self.input_ndim = 3
-        super(AttentionDecoderCell, self).__init__(**kwargs)
+        super(PointerDecoderCell, self).__init__(**kwargs)
 
 
     def build_model(self, input_shape):
@@ -148,6 +148,7 @@ class PointerDecoderCell(ExtendedRNNCell):
 
         alpha = W3(_xC)
         alpha = Lambda(lambda x: K.reshape(x, (-1, input_length)), output_shape=(input_length,))(alpha)
+        alpha = Activation('tanh')(alpha)
         alpha = Activation('softmax')(alpha)
 
         _x = Lambda(lambda x: K.batch_dot(x[0], x[1], axes=(1, 1)), output_shape=(input_dim,))([alpha, x])
