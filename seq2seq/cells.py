@@ -150,6 +150,7 @@ class PointerDecoderCell(ExtendedRNNCell):
         alpha = Lambda(lambda x: K.reshape(x, (-1, input_length)), output_shape=(input_length,))(alpha)
         alpha = Activation('tanh')(alpha)
         alpha = Activation('softmax')(alpha)
+        alpha = K.one_hot(K.argmax(alpha, -1), input_length)
 
         _x = Lambda(lambda x: K.batch_dot(x[0], x[1], axes=(1, 1)), output_shape=(input_dim,))([alpha, x])
 

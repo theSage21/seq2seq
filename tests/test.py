@@ -62,7 +62,7 @@ def test_AttentionSeq2Seq():
 
 
 @keras_test
-def test_AttentionSeq2Seq():
+def test_PointerSeq2Seq():
     x = np.random.random((samples, input_length, input_dim))
     y = np.random.random((samples, output_length, output_dim))
 

@@ -1,16 +1,8 @@
 from __future__ import absolute_import
 from recurrentshop import LSTMCell, RecurrentSequential
-from .cells import LSTMDecoderCell, AttentionDecoderCell
-from keras.models import Sequential, Model
+from .cells import LSTMDecoderCell, AttentionDecoderCell, PointerDecoderCell
+from keras.models import Model
 from keras.layers import Dense, Dropout, TimeDistributed, Bidirectional, Input
-
-
-'''
-Papers:
-[1] Sequence to Sequence Learning with Neural Networks (http://arxiv.org/abs/1409.3215)
-[2] Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation (http://arxiv.org/abs/1406.1078)
-[3] Neural Machine Translation by Jointly Learning to Align and Translate (http://arxiv.org/abs/1409.0473)
-'''
 
 
 def SimpleSeq2Seq(output_dim, output_length, hidden_dim=None, input_shape=None,
@@ -19,14 +11,6 @@ def SimpleSeq2Seq(output_dim, output_length, hidden_dim=None, input_shape=None,
                   stateful=False):
 
     '''
-    Simple model for sequence to sequence learning.
-    The encoder encodes the input sequence to vector (called context vector)
-    The decoder decodes the context vector in to a sequence of vectors.
-    There is no one on one relation between the input and output sequence
-    elements. The input sequence and output sequence may differ in length.
-
-    Arguments:
-
     output_dim : Required output dimension.
     hidden_dim : The dimension of the internal representations of the model.
     output_length : Length of the required output sequence.
@@ -36,7 +20,6 @@ def SimpleSeq2Seq(output_dim, output_length, hidden_dim=None, input_shape=None,
             if depth = (4, 5), 4 LSTMs will be added to the encoding side and
             5 LSTMs will be added to the decoding side.
     dropout : Dropout probability in between layers.
-
     '''
 
     if isinstance(depth, int):
